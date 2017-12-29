@@ -13,7 +13,7 @@ public class FruitEventListener : MonoBehaviour {
 	public bool stop;
 
 	void Start(){
-		limitTime = 30;//限定的時間
+		limitTime = 60;//限定的時間
 		totalTime =0;
 
 
@@ -35,7 +35,8 @@ public class FruitEventListener : MonoBehaviour {
 
 			} else {
 				//時間到就直接切換結帳場景
-				Debug.Log ("Go to scene3");
+				//Debug.Log ("Go to scene3");
+				SceneManager.LoadScene("checkout");
 			}
 		}
 	}

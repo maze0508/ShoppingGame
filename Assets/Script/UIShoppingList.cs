@@ -20,17 +20,19 @@ public class UIShoppingList : MonoBehaviour {
 		shoppingList = GlobalVariables.shoppingList;
 
 		for (int i = 0; i < q_list.Length; i++) {
-			Image newObj = Instantiate (context);
-			newObj.transform.SetParent (listcontent.transform);
-			newObj.name = shoppingList[i];
-			newObj.transform.localPosition = new Vector3(0.0f,-50.0f-(90.0f*i),0.0f);
-			newObj.transform.localScale = Vector3.one;
-			Text newText = newObj.GetComponentsInChildren<Text> () [0];
-			newText.text = q_list [i];
+			if (shoppingList [i] != null) {
+				Image newObj = Instantiate (context);
+				newObj.transform.SetParent (listcontent.transform);
+				newObj.name = shoppingList [i];
+				newObj.transform.localPosition = new Vector3 (0.0f, -50.0f - (90.0f * i), 0.0f);
+				newObj.transform.localScale = Vector3.one;
+				Text newText = newObj.GetComponentsInChildren<Text> () [0];
+				newText.text = q_list [i];
+				//Debug.Log ("checkoutList: "+GlobalVariables.checkoutList[i]);
 
-			HintInfo = newText.GetComponentsInChildren<Text> ()[1];
-			HintInfo.text= db.getFruitInfo (newObj.name);
-
+				HintInfo = newText.GetComponentsInChildren<Text> () [1];
+				HintInfo.text = db.getFVshortInfo (newObj.name);
+			}
 		}
 		btn_Back = GetComponentsInChildren<Button>()[0];
 		btn_Back.onClick.AddListener (backMain);

@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class ChooseLevel : MonoBehaviour {
 	private int difficultLevel,itemNumber ;
-	private string[]shoppingList,q_list,checkoutList;
-	public Image Img_Easy,Img_Normal,Img_Difficult;
+	private string[]shoppingList,q_list,checkoutList,AllFruit,AllVeg;
+
 	Button btn_Easy,btn_Normal,btn_Difficult;
 	SQLDB db;
 	int cloze;
@@ -33,55 +33,76 @@ public class ChooseLevel : MonoBehaviour {
 
 	//設定難易度，會影響清單的品項數量,克漏字數量,圖字表
 	public void setLevel(int _level){
+		
 		difficultLevel = _level;
+
 		if(_level==0){
-			itemNumber = 5;
+			itemNumber = 10;//fruit*5 + vegeteble*5
 			cloze = 3;
-			Img_Easy.transform.gameObject.SetActive (true);
+
 		}else if(_level==1){
-			itemNumber = 6;
+			itemNumber = 12;
 			cloze = 4;
-			Img_Normal.transform.gameObject.SetActive (true);
 		}else if(_level==2){
-			itemNumber = 7;
+			itemNumber = 14;
 			cloze = 5;
-			Img_Difficult.transform.gameObject.SetActive (true);
 		}
 		setList ();
 		setGlobalvar ();
-		StartCoroutine (waitload());
+		showTable ();
 	}
+
+
 
 	//從該難易度的水果，隨機存入清單中
 	public void setList(){
 		shoppingList = new string[itemNumber];
-		string []AllFruit = db.getFruitByLevel (difficultLevel);
+		AllFruit = db.getFVByLevel (difficultLevel,2);
+		AllVeg = db.getFVByLevel (difficultLevel,1);
 		int ran =0;
 		int[] rantemp = new int[itemNumber];
 
-		for (int pointer = 0; pointer < shoppingList.Length; pointer++) {
+		for (int pointer = 0; pointer < itemNumber/2; pointer++) {
 			ran = ranNumber (AllFruit.Length - 1, pointer, rantemp);
 			shoppingList [pointer] = AllFruit [ran];
 			rantemp [pointer] = ran;
 		}
+
+		/*Vegetable
+		 * for (int pointer = itemNumber/2; pointer < itemNumber; pointer++) {
+			ran = ranNumber (AllVeg.Length - 1, pointer, rantemp);
+			shoppingList [pointer] = AllVeg [ran];
+			rantemp [pointer] = ran;
+			Debug.Log (shoppingList [pointer]);
+		}
+		*/
+
+		db.closeDBConnecting ();
 		setCloze ();
 	}
 
 	//根據克漏字數量挖空
 	public void setCloze(){
 		q_list = new string[itemNumber];
+		checkoutList = new string[itemNumber];
 		string s_temp;
 		for(int i = 0;i<shoppingList.Length;i++){
-			q_list [i] = shoppingList [i];
-			for (int j = 1; j <= cloze; j++) {
-				s_temp = q_list [i];
-				int ran = Random.Range(0,s_temp.Length-1);
-				s_temp = s_temp.Replace (s_temp [ran],'_');//與s_temp [ran]相同的字元取代成底線
-				q_list [i] = s_temp;
-				//Debug.Log ("ran: "+ran+" s_temp: "+s_temp);
+			if (shoppingList [i] != null) {
+				q_list [i] = shoppingList [i];
+
+				for (int j = 1; j <= cloze; j++) {
+					s_temp = q_list [i];
+					int ran = Random.Range (0, s_temp.Length - 1);
+					//Debug.Log ("ran "+ran+",word: "+s_temp);
+					s_temp = s_temp.Remove (ran, 1);
+					//Debug.Log ("afterremove: "+s_temp);
+					s_temp = s_temp.Insert (ran, "_");
+					//Debug.Log ("afterinsert: "+s_temp);
+					q_list [i] = s_temp;
+				}
+				checkoutList [i] = q_list [i];
 			}
 		}
-		checkoutList = q_list;
 	}
 
 	//檢查ran是否重複
@@ -101,10 +122,11 @@ public class ChooseLevel : MonoBehaviour {
 		return i_ran;
 	}
 
-	IEnumerator waitload(){
-		yield return new WaitForSeconds (2f);
-		SceneManager.LoadScene ("main");
-		Destroy (gameObject);
+	void showTable(){
+		if (UIManager.Instance.IsUILive ("ChooseLevel")) {
+			UIManager.Instance.ClosePanel ("ChooseLevel");
+		}
+		UIManager.Instance.ShowPanel ("Figure");
 	}
 
 	//結束後要存回全域變數

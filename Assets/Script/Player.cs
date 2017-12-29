@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-	public GameObject player;
 	public float walkSpeed;
 	private Animator animator;
 	public Camera playerCamera;
@@ -21,15 +20,15 @@ public class Player : MonoBehaviour {
 
 
 		//player不能超出左邊界
-		if (player.transform.position.x < -6) {
-			player.transform.position = new Vector3 (-5, -2,0);
+		if (gameObject.transform.position.x < -6) {
+			gameObject.transform.position = new Vector3 (-5, -2,100);
 		} else {
-			player.transform.position += new Vector3(_moveH ,0,0);
+			gameObject.transform.position += new Vector3(_moveH,0,0);
 			//player.transform.Translate (new Vector2(_moveH, 0));
 		}
 		//camera不能超出左邊界		
 		//playerCamera.transform.Translate (new Vector2 (_moveH * 5*Time.deltaTime * walkSpeed, 0));
-		playerCamera.transform.position += new Vector3(_moveH *15*Time.deltaTime * walkSpeed, 0,0);
+		playerCamera.transform.position += new Vector3(_moveH*0.8f, 0,0);
 		if (playerCamera.transform.position.x < 0) 
 			playerCamera.transform.position = new Vector3(0,0,0);
 		
@@ -37,9 +36,9 @@ public class Player : MonoBehaviour {
 		if(_moveH != 0.0){
 			animator.SetBool ("walking", true);
 			if (_moveH < 0.0) {
-				player.transform.localScale = new Vector3 (-1.5f, 1.5f, 0);
+				gameObject.transform.localScale = new Vector3 (-1.5f, 1.5f, 0);
 			} else {
-				player.transform.localScale = new Vector3 (1.5f, 1.5f,0);
+				gameObject.transform.localScale = new Vector3 (1.5f, 1.5f,0);
 			}
 		}else{
 			animator.SetBool ("walking", false);

@@ -101,7 +101,7 @@ public class UIAdd : MonoBehaviour {
 			Button g_btnObj = Instantiate (btnObj [_header]);//Options
 			g_btnObj.transform.SetParent (GameObject.Find ("Content").transform);
 			g_btnObj.GetComponentsInChildren<Image> () [1].sprite = FruitAlphabet [_i];
-			g_btnObj.transform.localPosition = new Vector3 (setPos(odd,_L), -70.0f,0.0f);
+			g_btnObj.transform.localPosition = new Vector3 (100+setPos(odd,_i), -70.0f,0.0f);
 			g_btnObj.transform.localScale = Vector3.one;
 			g_btnObj.name = (char)(ranOption[_i]+97) + "";
 			g_btnObj.onClick.AddListener (() => showAlphabet(g_btnObj));
@@ -117,7 +117,7 @@ public class UIAdd : MonoBehaviour {
 	void createQues(int _L,bool _odd,int count){
 		Button g_btnQue = Instantiate (Btn_BGW);//Questions
 		g_btnQue.transform.SetParent (GameObject.Find ("Questions").transform);
-		g_btnQue.transform.localPosition = new Vector3 (setPos(_odd,count), 0.0f,0.0f);
+		g_btnQue.transform.localPosition = new Vector3 (40+setPos(_odd,count), -40.0f,0.0f);
 		//g_btnQue.transform.localPosition = new Vector3 (setPos(_odd,_L)+220.0f, 0.0f,0.0f);
 		g_btnQue.transform.localScale = Vector3.one;
 		g_btnQue.name = "q"+count;
@@ -173,11 +173,11 @@ public class UIAdd : MonoBehaviour {
 		if (userAns.CompareTo (fruitName.ToLower())==0) {
 			s_text = "Succeed to add!";
 			flag = true;
-			StartCoroutine (showfeedback(s_text,flag));
 		} else {
 			s_text = "Fail to add!";
-			StartCoroutine (showfeedback(s_text,flag));
+
 		}
+		StartCoroutine (showfeedback(s_text,flag));
 	}
 
 	IEnumerator showfeedback(string _text,bool _correct){
@@ -196,9 +196,12 @@ public class UIAdd : MonoBehaviour {
 	}
 
 	void success(){//如果回答正確，則返回UI_FruitInfo
-		for(int i =0;i<shoppingList.Length;i++){//如果此水果是清單上的水果
-			if(shoppingList[i]==fruitName){
-				q_List [i] = fruitName;
+		for(int i =0;i<shoppingList.Length;i++){
+			if(shoppingList[i]==fruitName){//如果此水果是清單上的水果
+				Debug.Log("1: "+GlobalVariables.checkoutList[i]);
+				q_List [i] = fruitName;//設定畫面上的清單水果值
+				Debug.Log("2: "+GlobalVariables.checkoutList[i]);
+				break;
 			}
 		}
 		setBasket (fruitName);//加入購物籃
@@ -218,7 +221,6 @@ public class UIAdd : MonoBehaviour {
 	void setGlobalVar(){
 
 		GlobalVariables.basket[currentCount] = basket[currentCount];
-		Debug.Log (GlobalVariables.basket[0] );
 		GlobalVariables.currentCount = ++currentCount;
 
 	}

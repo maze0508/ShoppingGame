@@ -7,7 +7,7 @@ public class SQLDB:MonoBehaviour {
 
 	Database db;//資料庫物件
 
-	string databaseName = "FruitDB.db";//資料庫名稱
+	string databaseName = "Resources/FruitDB.db";//資料庫名稱
 	string tableName = "Fruit";//資料庫內的資料表名稱
 	SqliteDataReader reader;//搜尋資料表的資料
 
@@ -22,8 +22,19 @@ public class SQLDB:MonoBehaviour {
 			Debug.Log ("Table isn't exist.");
 		}
 	}
+	public string getFVshortInfo(string s_searchColumn)
+	{
+		s_searchColumn = "'"+s_searchColumn+"'";
+		//搜尋和讀取符合的資料
+		reader = db.searchAccordData(tableName, "FruitName", "=", s_searchColumn);
+		string[] data = db.readStringData(reader, "FruitShortInfo");
+		//將讀取到的第一筆資料顯示出來
+		show = data[0].ToString();	
+		return show;
+	}
 
-	public string getFruitInfo(string s_searchColumn)
+
+	public string getFVInfo(string s_searchColumn)
 	{
 		s_searchColumn = "'"+s_searchColumn+"'";
 		//搜尋和讀取符合的資料
@@ -32,13 +43,19 @@ public class SQLDB:MonoBehaviour {
 		//將讀取到的第一筆資料顯示出來
 		show = data[0].ToString();	
 		return show;
-
 	}
 	
-	public string[] getFruitByLevel(int i_level){
-		reader = db.searchAccordData(tableName, "Level", "=", i_level+"");
+	public string[] getFVByLevel(int i_level,int i_cid){
+		string query = "SELECT * FROM " + tableName + " WHERE Level =" + i_level + " AND Catalogue_id =" + i_cid;
+		reader = db.executeQuery(query);
 		string[] data = db.readStringData(reader, "FruitName");
-		//show = data[0].ToString();
+		return data;
+	}
+
+	public string[] getCNByFV(int i_level,int i_cid){
+		string query = "SELECT * FROM " + tableName + " WHERE Level =" + i_level + " AND Catalogue_id =" + i_cid;
+		reader = db.executeQuery(query);
+		string[] data = db.readStringData(reader, "ChineseName");
 		return data;
 	}
 

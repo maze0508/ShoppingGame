@@ -9,9 +9,9 @@ public class Checkout : MonoBehaviour {
 	public Image ImgQues,fb_correct,fb_wrong;
 	public Text Ques;
 	public Button Btn_Submit, Btn_Reset;
-	public GameObject FruitBasket;
-
-	Button FruitinBasket,Btn_Alphabet;
+	public GameObject Basket;
+	AudioSource fruitspeak ;
+	Button Btn_FruitinBasket,Btn_Alphabet;
 	Sprite[] alphabet;
 	string []basket,checkoutList,shoppingList;
 	int Que_point,pointer,correctNum;
@@ -27,8 +27,11 @@ public class Checkout : MonoBehaviour {
 		Btn_Alphabet = Resources.Load ("Button/Btn_BGG", typeof(Button)) as Button;
 		createAlphaBtn ();
 
-		FruitinBasket = Resources.Load("Button/Btn_Basket", typeof (Button))as Button;
+		Btn_FruitinBasket = Resources.Load("Button/Btn_Basket", typeof (Button))as Button;
 		createBasket ();
+
+		fruitspeak = gameObject.AddComponent<AudioSource> ();
+		fruitspeak.playOnAwake = true;
 
 		Que_point = 0 ;
 		correctNum = 0;
@@ -42,18 +45,27 @@ public class Checkout : MonoBehaviour {
 		showQues ();
 	}
 
+	void gameover(){
+		Debug.Log("Correct count: "+correctNum);
+		setGlobalVariables ();
+		SceneManager.LoadScene ("gameover");
+	}
+
 	void showQues(){
 		if (Que_point < checkoutList.Length) {
 			Ques.text = checkoutList [Que_point];
+
+			//將圖片初始化
 			ImgQues.gameObject.SetActive (false);
 			ImgQues.GetComponent<Image> ().sprite = null;
-			Debug.Log ("題數:"+Que_point);
-			Que_point++;
+			//撥放題目的讀音
+			playAudio();
+			Debug.Log ("題數:"+Que_point+" "+checkoutList [Que_point]);
+
 		} else {
 			//End
-			Debug.Log("Correct count: "+correctNum);
-			setGlobalVariables ();
-			SceneManager.LoadScene ("gameover");
+			gameover();
+
 		}
 
 	}
@@ -73,8 +85,8 @@ public class Checkout : MonoBehaviour {
 
 	void createBasket(){
 		for (int i = 0; i < pointer; i++) {
-			Button fruitObj = Instantiate (FruitinBasket);
-			fruitObj.transform.SetParent (FruitBasket.gameObject.transform);
+			Button fruitObj = Instantiate (Btn_FruitinBasket);
+			fruitObj.transform.SetParent (Basket.gameObject.transform);
 			if (i / 5 > 0) {
 				fruitObj.transform.localPosition = new Vector3 (-190.0f+140.0f*(i%5), -125.0f,0.0f);
 			} else {
@@ -110,30 +122,31 @@ public class Checkout : MonoBehaviour {
 
 
 	void checkAns(){
-		int _Quepoint = Que_point-1;
-		if (shoppingList [_Quepoint] == Ques.text) {
-			if (shoppingList [_Quepoint] == Quefruitimgname ) {
-				correctNum++;
-				StartCoroutine (showfeedback(0));
-				Debug.Log ("Correct");
+		if (Que_point <= shoppingList.Length) {
+			if (shoppingList [Que_point] == Ques.text) {
+				if (shoppingList [Que_point] == Quefruitimgname) {
+					correctNum++;
+					StartCoroutine (showfeedback (0));
+					Debug.Log ("Correct");
+				} else {
+					StartCoroutine (showfeedback (1));
+					Debug.Log ("Wrong Image!");
+				}
 			} else {
-				StartCoroutine (showfeedback(1));
-				Debug.Log ("Wrong Image!");
+				if (shoppingList [Que_point] == Quefruitimgname) {
+					StartCoroutine (showfeedback (2));
+					Debug.Log ("Wrong name!");
+				} else {
+					StartCoroutine (showfeedback (3));
+					Debug.Log ("Wrong name and image!");
+				}
 			}
 		} else {
-			if (shoppingList [_Quepoint] == Quefruitimgname) {
-				StartCoroutine (showfeedback(2));
-				Debug.Log ("Wrong name!");
-			} else {
-				StartCoroutine (showfeedback(3));
-				Debug.Log ("Wrong name and image!");
-			}
+			gameover ();
 		}
 	}
 
 	IEnumerator showfeedback(int _state){
-		int _Quepoint = Que_point-1;
-
 
 		if (_state == 0) {
 			fb_wrong.gameObject.SetActive (false);
@@ -141,8 +154,8 @@ public class Checkout : MonoBehaviour {
 		}else{
 			fb_correct.gameObject.SetActive (false);
 			fb_wrong.gameObject.SetActive (true);
-			fb_wrong.GetComponentsInChildren<Image> () [2].sprite = Resources.Load ("ImgFruit/" + shoppingList [_Quepoint], typeof(Sprite))as Sprite;
-			fb_wrong.GetComponentsInChildren<Text>()[0].text = shoppingList[_Quepoint];
+			fb_wrong.GetComponentsInChildren<Image> () [2].sprite = Resources.Load ("ImgFruit/" + shoppingList [Que_point], typeof(Sprite))as Sprite;
+			fb_wrong.GetComponentsInChildren<Text>()[0].text = shoppingList[Que_point];
 			//Debug.Log (fb_wrong.GetComponentsInChildren<Image> () [2]);
 		}
 
@@ -152,14 +165,21 @@ public class Checkout : MonoBehaviour {
 		showQues ();
 	}
 
+	void playAudio(){
+		
+		fruitspeak.clip = Resources.Load ("Sound/"+shoppingList[Que_point], typeof(AudioClip))as AudioClip;
+		fruitspeak.Play ();
+		Debug.Log (shoppingList[Que_point]);
+		Debug.Log ("Sound"+fruitspeak.clip);
+	}
 
 	void reset(){
-		--Que_point;
 		showQues ();
 	}
 
 	void submit(){
 		checkAns ();
+		Que_point++;
 	}
 
 	void setGlobalVariables () {

@@ -63,11 +63,12 @@ public class Database
         //connectString = @"Data Source=" + Application.persistentDataPath + "/";
 
         //2.此位置若是在Unity執行，則會放置在專案資料夾內；若是輸出成exe後則是放置在輸出後的Data資料夾內
-        connectString = @"Data Source=" + Application.dataPath + "/SQLite/";
+        connectString = @"Data Source=" + Application.dataPath + "/";
 
         //3.程式人員自行指定位置
         //connectString = @"Data Source=" + ;
 #endif
+
         dbSqlConnection = new SqliteConnection(connectString + databaseName);
     }
 
