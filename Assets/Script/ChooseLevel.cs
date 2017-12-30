@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,22 +60,25 @@ public class ChooseLevel : MonoBehaviour {
 		AllFruit = db.getFVByLevel (difficultLevel,2);
 		AllVeg = db.getFVByLevel (difficultLevel,1);
 		int ran =0;
-		int[] rantemp = new int[itemNumber];
+		int[] frantemp = new int[itemNumber];
 
 		for (int pointer = 0; pointer < itemNumber/2; pointer++) {
-			ran = ranNumber (AllFruit.Length - 1, pointer, rantemp);
+			ran = ranNumber (AllFruit.Length - 1, pointer, frantemp);
 			shoppingList [pointer] = AllFruit [ran];
-			rantemp [pointer] = ran;
+			frantemp [pointer] = ran;
 		}
 
-		/*Vegetable
-		 * for (int pointer = itemNumber/2; pointer < itemNumber; pointer++) {
-			ran = ranNumber (AllVeg.Length - 1, pointer, rantemp);
+		/*Vegetable*/
+		int []vrantemp = new int[itemNumber];
+		int ran_pointer = 0;
+		  for (int pointer = itemNumber/2; pointer < itemNumber; pointer++) {
+			ran = ranNumber (AllVeg.Length - 1, ran_pointer, vrantemp);
+			//Debug.Log ("Veg"+AllVeg.Length);
 			shoppingList [pointer] = AllVeg [ran];
-			rantemp [pointer] = ran;
-			Debug.Log (shoppingList [pointer]);
+			//Debug.Log ("ran"+ran);
+			vrantemp [ran_pointer] = ran;
 		}
-		*/
+
 
 		db.closeDBConnecting ();
 		setCloze ();
@@ -89,15 +92,21 @@ public class ChooseLevel : MonoBehaviour {
 		for(int i = 0;i<shoppingList.Length;i++){
 			if (shoppingList [i] != null) {
 				q_list [i] = shoppingList [i];
-
-				for (int j = 1; j <= cloze; j++) {
+				int[] rantemp = new int[cloze];
+				int ran = 0;
+				for (int j = 0; j < cloze; j++) {
+					if(j == q_list[i].Length){
+						break;
+					}
 					s_temp = q_list [i];
-					int ran = Random.Range (0, s_temp.Length - 1);
+					ran = ranNumber (s_temp.Length - 1, j- 1, rantemp);
+					rantemp [j] = ran;
+					//int ran = Random.Range (0, s_temp.Length - 1);
 					//Debug.Log ("ran "+ran+",word: "+s_temp);
 					s_temp = s_temp.Remove (ran, 1);
 					//Debug.Log ("afterremove: "+s_temp);
 					s_temp = s_temp.Insert (ran, "_");
-					//Debug.Log ("afterinsert: "+s_temp);
+					//Debug.Log (ran+" afterinsert:"+s_temp);
 					q_list [i] = s_temp;
 				}
 				checkoutList [i] = q_list [i];

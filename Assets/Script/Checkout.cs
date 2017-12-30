@@ -53,7 +53,7 @@ public class Checkout : MonoBehaviour {
 
 	void showQues(){
 		if (Que_point < checkoutList.Length) {
-			Ques.text = checkoutList [Que_point];
+			Ques.text = checkoutList [Que_point]+" ";
 
 			//將圖片初始化
 			ImgQues.gameObject.SetActive (false);
