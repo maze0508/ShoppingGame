@@ -4,15 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Gameover : MonoBehaviour {
-	Text score;
+	public Image BG_G,BG_B;
+	//Text score;
 	GameObject list;
 	string[] shoppingList;
 	void Start () {
 		shoppingList = GlobalVariables.shoppingList;
 		list = Resources.Load ("Object/Basket_Fruit", typeof(GameObject))as GameObject;
-
-		score = GetComponentsInChildren<Text> () [1];
-		score.text = ""+GlobalVariables.correctCount;
+		if (GlobalVariables.correctCount == GlobalVariables.shoppingList.Length) {
+			BG_G.transform.gameObject.SetActive (true);
+		} else {
+			BG_B.transform.gameObject.SetActive (true);
+		}
+		//score = GetComponentsInChildren<Text> () [1];
+		//score.text = ""+GlobalVariables.correctCount;
 		showList ();
 	}
 	void showList(){
@@ -22,9 +27,9 @@ public class Gameover : MonoBehaviour {
 			g_list.transform.SetParent (gameObject.transform);
 			g_list.name = shoppingList [i];
 			if (i / 5 < 1) {
-				g_list.transform.localPosition = new Vector3 (-80.0f, 180.0f - (110.0f * i), 0.0f);
+				g_list.transform.localPosition = new Vector3 (-450.0f, 180.0f - (110.0f * i), 0.0f);
 			} else {
-				g_list.transform.localPosition = new Vector3 (280.0f, 180.0f - (110.0f * (i%5)), 0.0f);
+				g_list.transform.localPosition = new Vector3 (-110.0f, 180.0f - (110.0f * (i%5)), 0.0f);
 			}
 			g_list.transform.localScale = Vector3.one;
 			g_list.GetComponentsInChildren<Image>()[1].sprite =  Resources.Load ("ImgFruit/" + shoppingList [i], typeof(Sprite))as Sprite;

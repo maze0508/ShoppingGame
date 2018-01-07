@@ -77,6 +77,7 @@ public class ChooseLevel : MonoBehaviour {
 			shoppingList [pointer] = AllVeg [ran];
 			//Debug.Log ("ran"+ran);
 			vrantemp [ran_pointer] = ran;
+			ran_pointer++;
 		}
 
 

@@ -20,8 +20,8 @@ public class UIAdd : MonoBehaviour {
 	void Awake () {
 		if (!UIManager.Instance.IsUILive ("AddToBasket")) {
 			UIManager.Instance.ShowPanel ("AddToBasket");
-			UI_Feedback = GetComponentsInChildren<Image> () [19];
-			//Debug.Log (UI_Feedback.name);
+			UI_Feedback = GetComponentsInChildren<Image> () [21];
+			Debug.Log (UI_Feedback.name);
 			UI_Feedback.enabled = false;
 
 			fruitImg = GetComponentsInChildren<Image> () [9];

@@ -7,7 +7,8 @@ public class SQLDB:MonoBehaviour {
 
 	Database db;//資料庫物件
 
-	string databaseName = "Resources/FruitDB.db";//資料庫名稱
+	//string databaseName = "Resources/FruitDB.db";//資料庫名稱
+	string databaseName = "FruitDB.db";//資料庫名稱
 	string tableName = "Fruit";//資料庫內的資料表名稱
 	SqliteDataReader reader;//搜尋資料表的資料
 

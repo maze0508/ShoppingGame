@@ -14,6 +14,7 @@ public class UIShoppingList : MonoBehaviour {
 	string[] q_list,shoppingList;
 
 	void Start () {
+
 		context = Resources.Load ("Object/Context",typeof(Image)) as Image;
 		db = gameObject.AddComponent<SQLDB> ();
 		q_list = GlobalVariables.q_list;

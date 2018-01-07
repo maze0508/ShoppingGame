@@ -18,7 +18,6 @@ public class UIFruitInfo:MonoBehaviour {
 		if (!UIManager.Instance.IsUILive ("FruitInfo") && !UIManager.Instance.IsUILive ("Mask") && !GlobalVariables.flag) {
 			UIManager.Instance.ShowPanel ("Mask");
 			UIManager.Instance.ShowPanel ("FruitInfo");
-			GlobalVariables.flag = false;
 
 			fruitSprite = GetComponentsInChildren<Image> () [8];
 			fruitName = GetComponentsInChildren<Text>()[1];
@@ -30,8 +29,6 @@ public class UIFruitInfo:MonoBehaviour {
 			btn_Addto.onClick.AddListener (showQus);
 			btn_BackMain.onClick.AddListener (backMain);
 			btn_Audio.onClick.AddListener (playAudio);
-
-			//Fs = new FruitEventListener ();
 		}
 	}
 		

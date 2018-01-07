@@ -10,7 +10,6 @@ public class FruitEventListener : MonoBehaviour {
 	Button btn_list,btn_basket;
 	Text t_Timer;
 	int totalTime,limitTime;
-	public bool stop;
 
 	void Start(){
 		limitTime = 60;//限定的時間
@@ -62,10 +61,16 @@ public class FruitEventListener : MonoBehaviour {
 		
 	void showList(){
 		GlobalVariables.flag = false;
+		if (UIManager.Instance.IsUILive ("Basket")) {
+			UIManager.Instance.ClosePanel ("Basket");	
+		}
 		UIManager.Instance.ShowPanel ("ShoppingList");
 	}
 	void showBasket(){
 		GlobalVariables.flag = false;
+		if (UIManager.Instance.IsUILive ("ShoppingList")) {
+			UIManager.Instance.ClosePanel ("ShoppingList");	
+		}
 		UIManager.Instance.ShowPanel ("Basket");
 	}
 }

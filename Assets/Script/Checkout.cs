@@ -87,12 +87,12 @@ public class Checkout : MonoBehaviour {
 		for (int i = 0; i < pointer; i++) {
 			Button fruitObj = Instantiate (Btn_FruitinBasket);
 			fruitObj.transform.SetParent (Basket.gameObject.transform);
-			if (i / 5 > 0) {
-				fruitObj.transform.localPosition = new Vector3 (-190.0f+140.0f*(i%5), -125.0f,0.0f);
+			if (i / 6 > 0) {
+				fruitObj.transform.localPosition = new Vector3 (-200.0f+90.0f*(i%6), -125.0f,0.0f);
 			} else {
-				fruitObj.transform.localPosition = new Vector3 (-190.0f+140.0f*(i%5), -25.0f,0.0f);
+				fruitObj.transform.localPosition = new Vector3 (-200.0f+90.0f*(i%6), -25.0f,0.0f);
 			}
-			fruitObj.transform.localScale = Vector3.one;
+			fruitObj.transform.localScale = new Vector3(0.7f,0.7f,0.7f);
 			fruitObj.name = basket[i];
 			fruitObj.GetComponent<Image>().sprite = Resources.Load ("ImgFruit/" + basket[i], typeof(Sprite))as Sprite;
 			fruitObj.onClick.AddListener (() => setImage (fruitObj.name ,fruitObj.GetComponent<Image>().sprite));
@@ -123,8 +123,10 @@ public class Checkout : MonoBehaviour {
 
 	void checkAns(){
 		if (Que_point <= shoppingList.Length) {
-			if (shoppingList [Que_point] == Ques.text) {
-				if (shoppingList [Que_point] == Quefruitimgname) {
+			Ques.text = Ques.text.Remove(Ques.text.IndexOf (' '));
+
+			if (shoppingList [Que_point].ToLower() == Ques.text.ToLower()) {
+				if (shoppingList [Que_point].ToLower() == Quefruitimgname.ToLower()) {
 					correctNum++;
 					StartCoroutine (showfeedback (0));
 					Debug.Log ("Correct");
@@ -135,7 +137,7 @@ public class Checkout : MonoBehaviour {
 			} else {
 				if (shoppingList [Que_point] == Quefruitimgname) {
 					StartCoroutine (showfeedback (2));
-					Debug.Log ("Wrong name!");
+					Debug.Log (Ques.text+Ques.text.Length+" Wrong name!");
 				} else {
 					StartCoroutine (showfeedback (3));
 					Debug.Log ("Wrong name and image!");

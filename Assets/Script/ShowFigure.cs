@@ -23,7 +23,7 @@ public class ShowFigure : MonoBehaviour {
 		AllFruit = db.getFVByLevel (difficultLevel,2);
 		AllFruitCN = db.getCNByFV (difficultLevel,2);
 		AllVeg = db.getFVByLevel (difficultLevel,1);
-		AllVegCN = db.getCNByFV (difficultLevel,2);
+		AllVegCN = db.getCNByFV (difficultLevel,1);
 
 		_i = 0;
 		s_letter = "";
@@ -50,14 +50,18 @@ public class ShowFigure : MonoBehaviour {
 
 		t_allfruitname = TableName.GetComponentInChildren<Text> ();
 		for (int i = 0; i < AllFruit.Length; i++) {
-			if(i/2>0 && i%2==0){
+			if (i / 2 > 0 && i % 2 == 0) {
 				t_allfruitname.text += " \n ";
 			}
-			t_allfruitname.text += AllFruit [i]+" "+ AllFruitCN [i];
+			t_allfruitname.text += AllFruit [i] + " " + AllFruitCN [i];
 			t_allfruitname.text += " \t ";
-
-			//t_allfruitname.text += AllVeg [i]+" "++ AllVegCN [i];
-			//t_allfruitname.text += "\t";
+		}
+		for (int i = 0; i < AllVeg.Length; i++) {
+			if (i / 2 > 0 && i % 2 == 0) {
+				t_allfruitname.text += " \n ";
+			}
+			t_allfruitname.text += AllVeg [i]+" "+ AllVegCN [i];
+			t_allfruitname.text += "\t";
 		}
 		db.closeDBConnecting ();
 		TableName.transform.gameObject.SetActive (true);

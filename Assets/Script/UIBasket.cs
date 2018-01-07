@@ -24,12 +24,15 @@ public class UIBasket : MonoBehaviour {
 		for (int i = 0; i < pointer; i++) {
 			GameObject fruitObj = Instantiate (BasketFruit);
 			fruitObj.transform.SetParent (gameObject.transform);
-			if (i % 2 > 0) {
-				fruitObj.transform.localPosition = new Vector3 (180.0f, (i / 2)*(-100.0f),0.0f);
-			} else {
-				fruitObj.transform.localPosition = new Vector3 (-180.0f, (i / 2)*(-100.0f),0.0f);
+
+			if (i % 3 == 0) {
+				fruitObj.transform.localPosition = new Vector3 (-250.0f, (i / 3)*(-100.0f),0.0f);
+			} else if(i % 3 == 1) {
+				fruitObj.transform.localPosition = new Vector3 (0.0f, (i / 3)*(-100.0f),0.0f);
+			}else{
+				fruitObj.transform.localPosition = new Vector3 (250.0f, (i / 3)*(-100.0f),0.0f);
 			}
-			fruitObj.transform.localScale = Vector3.one;
+			fruitObj.transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
 			fruitObj.GetComponentsInChildren<Image> () [1].sprite = Resources.Load ("ImgFruit/" + basket[i], typeof(Sprite))as Sprite;
 			fruitObj.GetComponentsInChildren<Text> () [0].text = basket[i];
 			//Debug.Log (fruitObj.GetComponentsInChildren<Image> () [1].sprite );

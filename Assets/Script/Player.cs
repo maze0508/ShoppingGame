@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 		if (gameObject.transform.position.x < -6) {
 			gameObject.transform.position = new Vector3 (-5, -2,100);
 		} else {
-			gameObject.transform.position += new Vector3(_moveH,0,0);
+			gameObject.transform.position += new Vector3(_moveH*0.9f,0,0);
 			//player.transform.Translate (new Vector2(_moveH, 0));
 		}
 		//camera不能超出左邊界		
@@ -47,13 +47,13 @@ public class Player : MonoBehaviour {
 	}
 
 	float MobileInput(){
-		if (Input.touchCount <= 0)
+		if (Input.touches.Length <= 0)
 			return 0;
-		if (Input.touchCount == 1) {
-			if (Input.touches [0].phase == TouchPhase.Began) {
+		if (Input.touches.Length == 1) {
+			if (Input.touches [0].phase == TouchPhase.Ended) {
 				return Input.touches [0].deltaPosition.x * walkSpeed * Time.deltaTime;
 			}
-		}
+		} 
 		return 0;
 	}
 
